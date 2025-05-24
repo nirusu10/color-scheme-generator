@@ -5,6 +5,22 @@ const colorInput = document.getElementById('color-input')
 const modeInput = document.getElementById('mode-input')
 const colorGrid = document.getElementById('color-grid')
 
+colorGrid.addEventListener('click', (e) => {
+  const parentNode = e.target.parentElement
+  const colorString = parentNode.dataset.color
+  const colorEl = parentNode.querySelector('p')
+  const originalTextColor = colorEl.style.color
+  navigator.clipboard.writeText(colorString)
+  colorEl.textContent = 'copied!'
+  colorEl.style.color = colorString
+  colorEl.style.fontWeight = 'bold'
+  setTimeout(function () {
+    colorEl.textContent = colorString
+    colorEl.style.color = originalTextColor
+    colorEl.style.fontWeight = 400
+  }, 1000)
+})
+
 const baseUrl = 'https://www.thecolorapi.com'
 
 colorForm.addEventListener('submit', (e) => {
@@ -28,7 +44,7 @@ function renderColors() {
   const colorsHtml = colors
     .map((color, index) => {
       return `
-      <div class="color-container">
+      <div class="color-container" data-color="${color}">
           <div class="color" id="color${
             index + 1
           }" style="background-color: ${color}"></div>
